@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
 import api from '../services/api';
+import { requestPermission, checkDueTasks } from '../utils/notifications';
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
@@ -68,6 +69,14 @@ export default function Dashboard() {
     completed: tasks.filter(t => t.status === 'completed').length,
     high: tasks.filter(t => t.priority === 'high' && t.status !== 'completed').length,
   };
+  
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  useEffect(() => {
+    if (tasks.length > 0) checkDueTasks(tasks);
+  }, [tasks]);
 
   return (
     <div className="dashboard">
