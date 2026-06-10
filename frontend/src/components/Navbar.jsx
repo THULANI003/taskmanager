@@ -14,8 +14,8 @@ export default function Navbar({ darkMode, setDarkMode }) {
     <nav className="navbar">
       <div className="nav-brand">✅ TaskManager</div>
       <div className="nav-right">
-        <span className="nav-user">Hi, {user?.name}</span>
-        <button className="btn-icon" onClick={() => setDarkMode(!darkMode)}>
+        <span className="nav-user">{user?.name}</span>
+        <button className="btn-icon" title="Toggle theme" onClick={() => setDarkMode(!darkMode)}>
           {darkMode ? '☀️' : '🌙'}
         </button>
         <button className="btn-logout" onClick={handleLogout}>Logout</button>
