@@ -8,6 +8,8 @@ const taskRoutes = require('./routes/taskRoutes');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 //  Limiters defined before use
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
