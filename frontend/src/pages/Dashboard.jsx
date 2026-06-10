@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
@@ -39,23 +40,27 @@ export default function Dashboard() {
     await api.post('/tasks', form);
     setShowForm(false);
     fetchTasks();
+    toast.success('Task created!');
   };
 
   const handleUpdate = async (form) => {
     await api.put(`/tasks/${editTask.id}`, form);
     setEditTask(null);
     fetchTasks();
+    toast.success('Task updated!');
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this task?')) return;
     await api.delete(`/tasks/${id}`);
     fetchTasks();
+    toast.success('Task deleted!');
   };
 
   const handleToggle = async (id) => {
     await api.patch(`/tasks/${id}/status`);
     fetchTasks();
+    toast.success('Status updated!');
   };
 
   const stats = {
