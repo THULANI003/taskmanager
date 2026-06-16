@@ -19,6 +19,9 @@ export default function TaskForm({ onSubmit, onClose, initial }) {
     onSubmit(form);
   };
 
+  const today = new Date().toISOString().split('T')[0];
+  const isBackdating = form.due_date && form.due_date < today;
+
   return (
     <div className="modal-overlay">
       <div className="modal">
@@ -59,6 +62,11 @@ export default function TaskForm({ onSubmit, onClose, initial }) {
             value={form.due_date || ''}
             onChange={e => setForm({ ...form, due_date: e.target.value })}
           />
+          {isBackdating && !initial && (
+            <p className="backdate-warning">
+              ⚠️ This date is in the past. Task will be marked as <strong>Backdated</strong>.
+            </p>
+          )}
           <div className="form-actions">
             <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn-primary">

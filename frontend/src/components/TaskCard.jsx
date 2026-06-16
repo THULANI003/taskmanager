@@ -7,15 +7,25 @@ export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
 
   const today = new Date().toISOString().split('T')[0];
   const dueDate = task.due_date?.split('T')[0];
+  const createdDate = task.created_at?.split('T')[0];
 
   const isOverdue = task.due_date &&
     dueDate < today &&
-    task.status !== 'completed';
+    task.status !== 'completed' &&
+    createdDate && dueDate >= createdDate;
+
+  const isBackdated = task.due_date &&
+    dueDate < today &&
+    task.status !== 'completed' &&
+    !isOverdue;
 
   const p = priorityConfig[task.priority];
 
   return (
-    <div className={`task-card ${task.status === 'completed' ? 'task-completed' : ''} ${isOverdue ? 'task-overdue' : ''}`}>
+    <div className={`task-card 
+      ${task.status === 'completed' ? 'task-completed' : ''} 
+      ${isOverdue ? 'task-overdue' : ''} 
+      ${isBackdated ? 'task-backdated' : ''}`}>
       <div className="task-header">
         <input
           type="checkbox"
@@ -30,8 +40,8 @@ export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
       <h3 className="task-title">{task.title}</h3>
       {task.description && <p className="task-desc">{task.description}</p>}
       {task.due_date && (
-        <p className={`task-due ${isOverdue ? 'overdue-text' : ''}`}>
-          📅 {isOverdue ? 'Overdue: ' : 'Due: '}
+        <p className={`task-due ${isOverdue ? 'overdue-text' : ''} ${isBackdated ? 'backdated-text' : ''}`}>
+          📅 {isOverdue ? 'Overdue: ' : isBackdated ? 'Backdated: ' : 'Due: '}
           {new Date(task.due_date).toLocaleDateString('en-CA', { timeZone: 'UTC' })}
         </p>
       )}
