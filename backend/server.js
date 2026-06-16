@@ -1,10 +1,8 @@
 require('dotenv').config();
-console.log('CLIENT_URL:', process.env.CLIENT_URL);
 
 const express = require('express');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');  
-
+const rateLimit = require('express-rate-limit');
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
@@ -13,7 +11,6 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-//  Limiters defined before use
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -26,8 +23,14 @@ const generalLimiter = rateLimit({
 });
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173'
+  origin: function (origin, callback) {
+    if (!origin || origin.endsWith('.vercel.app') || origin === 'http://localhost:5173') {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  }
 }));
+
 app.use(express.json());
 
 app.use('/api/auth', authLimiter, authRoutes);
