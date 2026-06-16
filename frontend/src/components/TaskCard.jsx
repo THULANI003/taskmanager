@@ -5,15 +5,13 @@ export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
     low:    { label: 'Low',    className: 'badge-low' },
   };
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dueDate = new Date(task.due_date);
-  dueDate.setHours(0, 0, 0, 0);
+  const today = new Date().toISOString().split('T')[0];
+  const dueDate = task.due_date?.split('T')[0];
 
   const isOverdue = task.due_date &&
     dueDate < today &&
     task.status !== 'completed';
-    
+
   const p = priorityConfig[task.priority];
 
   return (
@@ -34,7 +32,7 @@ export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
       {task.due_date && (
         <p className={`task-due ${isOverdue ? 'overdue-text' : ''}`}>
           📅 {isOverdue ? 'Overdue: ' : 'Due: '}
-          {new Date(task.due_date).toLocaleDateString()}
+          {new Date(task.due_date).toLocaleDateString('en-CA', { timeZone: 'UTC' })}
         </p>
       )}
       <div className="task-actions">
