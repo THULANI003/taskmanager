@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function TaskForm({ onSubmit, onClose, initial }) {
+export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -21,6 +21,9 @@ export default function TaskForm({ onSubmit, onClose, initial }) {
 
   const today = new Date().toISOString().split('T')[0];
   const isBackdating = form.due_date && form.due_date < today;
+  const isDuplicate = !initial && tasks.some(
+    t => t.title.trim().toLowerCase() === form.title.trim().toLowerCase()
+  );
 
   return (
     <div className="modal-overlay">
@@ -34,6 +37,11 @@ export default function TaskForm({ onSubmit, onClose, initial }) {
             onChange={e => setForm({ ...form, title: e.target.value })}
             required
           />
+          {isDuplicate && (
+            <p className="backdate-warning">
+              ⚠️ A task with this title already exists.
+            </p>
+          )}
           <textarea
             placeholder="Description (optional)"
             value={form.description || ''}

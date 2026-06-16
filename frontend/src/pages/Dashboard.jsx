@@ -158,6 +158,7 @@ export default function Dashboard() {
         <TaskForm
           onSubmit={handleCreate}
           onClose={() => setShowForm(false)}
+          tasks={tasks}
         />
       )}
       {editTask && (
