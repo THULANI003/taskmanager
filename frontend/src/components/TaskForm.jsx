@@ -16,13 +16,24 @@ export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.title.trim()) return;
+    if (isExactDuplicate) return;
     onSubmit(form);
   };
 
   const today = new Date().toISOString().split('T')[0];
   const isBackdating = form.due_date && form.due_date < today;
-  const isDuplicate = !initial && tasks.some(
-    t => t.title.trim().toLowerCase() === form.title.trim().toLowerCase()
+
+  const normalize = (str) => (str || '').trim().toLowerCase();
+
+  const isExactDuplicate = !initial && tasks.some(t =>
+    normalize(t.title) === normalize(form.title) &&
+    normalize(t.description) === normalize(form.description) &&
+    t.priority === form.priority &&
+    (t.due_date || '') === (form.due_date || '')
+  );
+
+  const isTitleDuplicate = !initial && !isExactDuplicate && tasks.some(
+    t => normalize(t.title) === normalize(form.title)
   );
 
   return (
@@ -37,7 +48,12 @@ export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
             onChange={e => setForm({ ...form, title: e.target.value })}
             required
           />
-          {isDuplicate && (
+          {isExactDuplicate && (
+            <p className="backdate-warning" style={{ borderColor: 'var(--danger)', color: 'var(--danger)' }}>
+              🚫 This exact task already exists. Change at least one field to continue.
+            </p>
+          )}
+          {isTitleDuplicate && (
             <p className="backdate-warning">
               ⚠️ A task with this title already exists.
             </p>
@@ -77,7 +93,7 @@ export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
           )}
           <div className="form-actions">
             <button type="button" className="btn-cancel" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-primary" disabled={isExactDuplicate}>
               {initial ? 'Save changes' : 'Create task'}
             </button>
           </div>
