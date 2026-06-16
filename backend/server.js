@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');  
-require('dotenv').config();
+
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
@@ -22,7 +24,9 @@ const generalLimiter = rateLimit({
   max: 100
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173'
+}));
 app.use(express.json());
 
 app.use('/api/auth', authLimiter, authRoutes);
