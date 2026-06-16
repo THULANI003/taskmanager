@@ -5,10 +5,15 @@ export default function TaskCard({ task, onDelete, onEdit, onToggle }) {
     low:    { label: 'Low',    className: 'badge-low' },
   };
 
-  const isOverdue = task.due_date &&
-    new Date(task.due_date) < new Date() &&
-    task.status !== 'completed';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDate = new Date(task.due_date);
+  dueDate.setHours(0, 0, 0, 0);
 
+  const isOverdue = task.due_date &&
+    dueDate < today &&
+    task.status !== 'completed';
+    
   const p = priorityConfig[task.priority];
 
   return (
