@@ -80,7 +80,14 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (tasks.length > 0) checkDueTasks(tasks);
+    if (tasks.length > 0) {
+      const today = new Date().toISOString().split('T')[0];
+      const lastChecked = localStorage.getItem('notificationDate');
+      if (lastChecked !== today) {
+        checkDueTasks(tasks);
+        localStorage.setItem('notificationDate', today);
+      }
+    }
   }, [tasks]);
 
   return (
