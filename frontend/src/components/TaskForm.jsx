@@ -29,7 +29,7 @@ export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
     normalize(t.title) === normalize(form.title) &&
     normalize(t.description) === normalize(form.description) &&
     t.priority === form.priority &&
-    (t.due_date || '') === (form.due_date || '')
+    (t.due_date || '').slice(0, 10) === (form.due_date || '').slice(0, 10)
   );
 
   const isTitleDuplicate = !initial && !isExactDuplicate && tasks.some(
