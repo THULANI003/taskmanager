@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editTask, setEditTask] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [search, setSearch] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -51,9 +52,13 @@ export default function Dashboard() {
     toast.success('Task updated!');
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this task?')) return;
-    await api.delete(`/tasks/${id}`);
+  const handleDelete = (id) => {
+    setDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    await api.delete(`/tasks/${deleteId}`);
+    setDeleteId(null);
     fetchTasks();
     toast.success('Task deleted!');
   };
@@ -69,7 +74,7 @@ export default function Dashboard() {
     completed: tasks.filter(t => t.status === 'completed').length,
     high: tasks.filter(t => t.priority === 'high' && t.status !== 'completed').length,
   };
-  
+
   useEffect(() => {
     requestPermission();
   }, []);
@@ -154,6 +159,22 @@ export default function Dashboard() {
           onSubmit={handleUpdate}
           onClose={() => setEditTask(null)}
         />
+      )}
+      {deleteId && (
+        <div className="modal-overlay">
+          <div className="modal" style={{ maxWidth: '360px', textAlign: 'center' }}>
+            <h2>Delete Task?</h2>
+            <p style={{ color: 'var(--text2)', margin: '0.75rem 0 1.5rem' }}>
+              This action cannot be undone.
+            </p>
+            <div className="form-actions" style={{ justifyContent: 'center' }}>
+              <button className="btn-cancel" onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="btn-primary" style={{ background: 'var(--danger)' }} onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
