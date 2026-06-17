@@ -10,7 +10,12 @@ export default function TaskForm({ onSubmit, onClose, initial, tasks = [] }) {
   });
 
   useEffect(() => {
-    if (initial) setForm(initial);
+    if (initial) {
+      setForm({
+        ...initial,
+        due_date: initial.due_date ? initial.due_date.split('T')[0] : '',
+      });
+    }
   }, [initial]);
 
   const handleSubmit = (e) => {
