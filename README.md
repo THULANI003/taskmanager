@@ -4,15 +4,24 @@ A full-stack task management web application built with React, Node.js, Express,
 
 ---
 
+## 🌐 Live Demo
+[https://taskmanager-gamma-ecru.vercel.app](https://taskmanager-gamma-ecru.vercel.app)
+
+---
+
 ## 🖥️ Screenshots
 
 | Light Mode | Dark Mode |
 |------------|-----------|
 | ![Dashboard Light](screenshots/dashboard-light.png) | ![Dashboard Dark](screenshots/dashboard-dark.png) |
 
-| Login | New Task |
+| Login | Register |
 |-------|----------|
-| ![Login](screenshots/login.png) | ![Task Form](screenshots/task-form.png) |
+| ![Login](screenshots/login.png) | ![Register](screenshots/register.png) |
+
+| New Task | Browser Notification |
+|----------|----------------------|
+| ![Task Form](screenshots/task-form.png) | ![Notification](screenshots/notification.png) |
 
 ---
 
@@ -25,8 +34,9 @@ A full-stack task management web application built with React, Node.js, Express,
 - **Search & Filter** — filter tasks by priority and status, search by title
 - **Overdue Detection** — tasks past their due date are highlighted automatically
 - **Dark Mode** — full dark/light theme toggle
-- **Browser Notifications** — native notifications for tasks due today and tomorrow
+- **Browser Notifications** — native notifications for tasks due today and tomorrow, once per day
 - **Toast Feedback** — instant success/error feedback on every action
+- **Delete Confirmation** — professional modal confirmation before deleting tasks
 - **Stats Dashboard** — live count of total, completed, and high priority tasks
 - **Rate Limiting** — brute force protection on auth routes (10 requests / 15 min)
 
@@ -154,7 +164,7 @@ PORT=5000
 ```bash
 cd backend
 npm install
-node server.js
+npm start
 ```
 
 ### 5. Install and run the frontend
